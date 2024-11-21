@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <unistd.h>
+
+int n, r;
+
+struct frame {
+    char ack;
+    int data;
+} Frm[10];
+
+int sender(void);
+void recvack(void);
+void resend_sr(void);
+void goback(void);
+void resend_gb(void);
+void selective(void);
+
+int main() {
+    int c;
+
+    do {
+        printf("\n 1.Selective Repeat ARQ\n 2.Goback ARQ \n 3.Exit");
+        printf("\n your Choice: ");
+        scanf("%d", &c);
+        switch (c) {
+            case 1:
+                selective();
+                break;
+            case 2:
+                goback();
+                break;
+            case 3:
+                exit(0);
+                break;
+        }
+    } while (c >= 4);
+
+    return 0;
+}
+
+void goback() {
+    sender();
+    recvack();
+    resend_gb();
+    printf("\nAll frames sent Successfully \n");
+}
+
+void selective() {
+    sender();
+    recvack();
+    resend_sr();
+    printf("\n All frames sent Successfully \n");
+}
+
+int sender() {
+    int i;
+    printf("\nEnter the no. of frames to be sent: ");
+    scanf("%d", &n);
+    for (i = 1; i <= n; i++) {
+        printf("\nEnter data for frames [%d]: ", i);
+        scanf("%d", &Frm[i].data);
+        Frm[i].ack = 'y';
+    }
+    return 0;
+}
+
+void recvack() {
+    int i;
+    rand();
+    r = rand() % n;
+    Frm[r].ack = 'n';
+    for (i = 1; i <= n; i++) {
+        if (Frm[i].ack == 'n') {
+            printf("\nThe frame number %d is not received\n", r);
+        }
+    }
+}
+
+void resend_sr() {
+    printf("\nSending frame %d", r);
+    sleep(2);
+    Frm[r].ack = 'y';
+    printf("\nThe Received frame is %d", Frm[r].data);
+}
+
+void resend_gb() {
+    int i;
+    printf("\nResending from frame %d", r);
+    for (i = r; i < n; i++) {
+        sleep(2);
+        Frm[i].ack = 'y';
+        printf("\nReceived data of frame %d is %d", i, Frm[i].data);
+    }
+}

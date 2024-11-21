@@ -1,0 +1,56 @@
+Wireshark
+
+Apply Filters:
+Use the display filter bar to narrow down the results. For example:
+http → Filters HTTP packets.
+tcp → Filters TCP packets.
+ip.addr == 142.250.190.14 → Filters packets involving a specific IP address.
+For Google, you can filter HTTP or HTTPS traffic.
+
+Inspect Packets:
+Click on a specific packet in the list to view its details.
+The details window is divided into three panes:
+Packet List Pane: Displays all captured packets.
+Packet Details Pane: Shows protocol details of the selected packet.
+Packet Bytes Pane: Displays raw data in hexadecimal and ASCII.
+Example Analysis: Capturing Traffic for www.google.com
+
+Identify the Packet:
+Use the filter http.host == "www.google.com" or tls.handshake.extensions_server_name == "www.google.com".
+Follow the TCP Stream:
+Right-click on a packet and select "Follow TCP Stream" to reconstruct the entire communication session between your computer and Google's server.
+Analyze the Packet Details:
+Look for key fields like:
+Source and Destination IP: Indicates where the packet originated and where it is headed.
+Protocol: Indicates the protocol in use (e.g., TCP, HTTP, HTTPS).
+Content: Shows data payload like request headers or responses.
+Step 6: Export and Save Captures
+
+Save the captured packets for future analysis:
+File → Save As → Choose format (.pcapng is the default format).
+
+
+Using Ethereal
+Ethereal was the predecessor to Wireshark and has largely been replaced. However, the steps to use it are similar:
+
+Start Ethereal and select the network interface for capturing.
+Capture traffic while accessing a website.
+Stop the capture and analyze packets.
+Filters and protocol details are analyzed similarly, though Wireshark has advanced beyond Ethereal's capabilities.
+Example Output for www.google.com
+Captured Data Example:
+
+Packet 1: DNS query to resolve "www.google.com".
+Packet 2: DNS response with IP address (e.g., 142.250.190.14).
+Packet 3: TCP SYN packet initiating a handshake.
+Packet 4: TCP SYN-ACK response from Google.
+Packet 5: HTTP GET request for Google's homepage.
+Packet 6: HTTP 200 OK response delivering the content.
+Key Insights:
+Analyze latency in the handshake process.
+Check if packets are retransmitted (indicating network issues).
+Inspect the HTTP request and response headers for details.
+Practical Tips:
+Use Wireshark filters for specific protocols (http, tcp, dns) or IPs.
+Familiarize yourself with TCP 3-way handshake packets (SYN, SYN-ACK, ACK).
+Ensure privacy by capturing only your network traffic.

@@ -1,0 +1,45 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<unistd.h>
+#include<arpa/inet.h>
+
+#define PORT 15000
+
+int main() {
+    int fd;
+    struct sockaddr_in srv;
+    char buf[512];
+    int nbytes;
+
+    if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        perror("socket");
+        exit(1);
+    }
+
+    srv.sin_family = AF_INET;
+    srv.sin_port = htons(PORT);
+    srv.sin_addr.s_addr = inet_addr("127.0.0.1"); //INADDR_ANY
+
+    if (connect(fd, (struct sockaddr*)&srv, sizeof(srv)) < 0) {
+        perror("connect");
+        exit(1);
+    }
+
+    strcpy(buf, "Hello Server");
+    if ((nbytes = write(fd, buf, strlen(buf))) < 0) {
+        perror("write");
+        exit(1);
+    }
+
+    if ((nbytes = read(fd, buf, sizeof(buf) - 1)) < 0) {
+        perror("read");
+        exit(1);
+    }
+
+    buf[nbytes] = '\0';
+    printf("Received message from server: %s\n", buf);
+
+    close(fd);
+    return 0;
+}

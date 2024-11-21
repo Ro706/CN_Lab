@@ -1,0 +1,41 @@
+nslookup
+www.google.com
+
+nslookup
+set q=ns
+www.google.com
+
+nslookup
+set q=soa
+www.google.com
+
+nslookup
+set debug
+www.google.com
+
+nslookup
+set q=mx
+www.google.com
+
+nslookup 8.8.8.8
+
+nslookup
+set q=txt
+www.gmail.com
+
+nslookup
+set type=any
+google.com
+
+nslookup 'Domain-Name' 'Server-Name'
+nslookup google.com ns1.google.com
+
+nslookup -type=ptr 4.4.8.8.in-addr.arpa
+
+ping www.google.com
+tracert www.google.com
+ipconfig
+
+
+
+

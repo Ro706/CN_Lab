@@ -1,0 +1,16 @@
+OPEN COMMAND PROMPT AS ADMINISTRATOR
+
+ipconfig
+ipconfig/all
+ipconfig/renew
+ipconfig/release
+
+nslookup
+www.amazon.com
+
+hostname
+
+ping www.google.com
+
+tracert www.google.com
+

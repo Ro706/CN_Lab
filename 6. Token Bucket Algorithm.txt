@@ -1,0 +1,39 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+
+#define bucket_size 10
+#define packet_rate 4
+
+int bucket = 0;
+
+void addToken(int token) {
+    bucket += token;
+    if (bucket > bucket_size) {
+        bucket = bucket_size;
+    }
+}
+
+void processPacket(int packet_size) {
+    if (packet_size <= bucket) {
+        bucket -= packet_size;
+        printf("Processed packet of size %d. Token left: %d\n", packet_size, bucket);
+    } else {
+        printf("Not enough tokens to process packet of size %d. Token left: %d\n", packet_size, bucket);
+    }
+}
+
+int main() {
+    int incomingPackets[] = {1, 3, 5};
+    int n = sizeof(incomingPackets) / sizeof(incomingPackets[0]);
+
+    for (int i = 0; i < n; i++) {
+        printf("\nTime %d seconds:\n", i + 1);
+        addToken(packet_rate);
+        printf("Added %d token. Bucket now contains %d tokens.\n", packet_rate, bucket);
+        processPacket(incomingPackets[i]);
+        sleep(1);
+    }
+
+    return 0;
+}

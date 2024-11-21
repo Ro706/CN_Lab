@@ -1,0 +1,61 @@
+SELECTIVE
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <unistd.h>  
+int n, r;
+struct frame {
+    char ack;
+    int data;
+} frm[10];
+
+int sender(void);
+void revack(void);
+void resend_sr(void);
+void goback(void);
+void resend_gb(void);
+void selective(void);
+
+int main() {
+  selective();
+}
+
+void selective() {
+    sender();
+    revack();
+    resend_sr();
+    printf("\nAll frames sent successfully\n");
+}
+
+int sender() {
+    int i;
+    printf("\nEnter the number of frames to be sent: ");
+    scanf("%d", &n);
+    for(i = 1; i <= n; i++) {
+        printf("\nframe[%d]: ", i);
+        scanf("%d", &frm[i].data);
+        frm[i].ack = 'y';
+    }
+    return 0;
+}
+
+void revack() {
+    int i;
+    rand();
+    r = rand() % n;
+    frm[r].ack = 'n';
+    for(i = 1; i <= n; i++) {
+        if(frm[i].ack == 'n') {
+            printf("\nFrame %d not received\n", r);
+        }
+    }
+}
+
+void resend_sr() {
+    printf("\nSending frame %d", r);
+    sleep(2);  // Sleep is now valid due to the inclusion of <unistd.h>
+    frm[r].ack = 'y';
+    printf("\nFrame %d received", frm[r].data);
+}
+

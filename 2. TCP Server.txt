@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+
+#define PORT 15000
+
+int main() {
+    int fd, newfd;
+    struct sockaddr_in srv, cli;
+    char buf[512];
+    socklen_t cli_len = sizeof(cli); //int
+    int nbytes;
+
+    if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        perror("socket");
+        exit(1);
+    }
+
+    srv.sin_family = AF_INET;
+    srv.sin_port = htons(PORT);
+    srv.sin_addr.s_addr = htonl(INADDR_ANY);
+
+    if (bind(fd, (struct sockaddr*)&srv, sizeof(srv)) < 0) {
+        perror("bind");
+        exit(1);
+    }
+
+    if (listen(fd, 5) < 0) {
+        perror("listen");
+        exit(1);
+    }
+
+    if ((newfd = accept(fd, (struct sockaddr*)&cli, &cli_len)) < 0) {
+        perror("accept");
+        exit(1);
+    }
+
+    if ((nbytes = read(newfd, buf, sizeof(buf) - 1)) < 0) {
+        perror("read");
+        exit(1);
+    }
+
+    buf[nbytes] = '\0';
+    printf("Received message from client: %s\n", buf);
+
+    strcpy(buf, "Hello Client");
+    if ((nbytes = write(newfd, buf, strlen(buf))) < 0) {
+        perror("write");
+        exit(1);
+    }
+
+    close(newfd);
+    close(fd);
+
+    return 0;
+}
